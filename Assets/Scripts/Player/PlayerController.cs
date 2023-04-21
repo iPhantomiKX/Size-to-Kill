@@ -5,15 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float rotationSpeed = 5.0f;
-
-    private GameObject character;
     private PlayerMovement playerMovement;
     public Gun gun;
 
     // Start is called before the first frame update
     void Start()
     {
-        character = gameObject.transform.GetChild(0).gameObject;
         playerMovement = gameObject.GetComponent<PlayerMovement>();
     }
 
@@ -44,11 +41,24 @@ public class PlayerController : MonoBehaviour
     public void Shoot()
     {
         if (gun != null)
+        {
             gun.Fire();
+            ScaleDown(0.05f);   //scale with health
+        }
     }
 
     private void Move()
     {
         playerMovement.Move();
+    }
+
+    public void ScaleDown(float offset)
+    {
+        Vector3 newScale = new Vector3(transform.localScale.x - offset, transform.localScale.y - offset, transform.localScale.z);
+        if (transform.localScale.x < 0.0f || transform.localScale.y < 0.0f)
+            //game over, but for now stick to setting it to 0
+            newScale.x = newScale.y = 0.0f;
+
+        transform.localScale = newScale;
     }
 }
