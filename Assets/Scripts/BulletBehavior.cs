@@ -33,23 +33,24 @@ public class BulletBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.LogError(collision.gameObject.name);
+        
         //if its an enemy, do knock back
-        if (collision.gameObject.tag == "Enemy")
+        if(collision.gameObject.tag != "Player")
         {
-            enemyRB = collision.gameObject.GetComponent<Rigidbody2D>();
-            if(enemyRB != null)
+            if (collision.gameObject.tag == "Enemy")
             {
-                enemyRB.AddForce(transform.right * knockbackForce, ForceMode2D.Impulse);
-                elapsedTime = 0f;
+                enemyRB = collision.gameObject.GetComponent<Rigidbody2D>();
+                if(enemyRB != null)
+                {
+                    enemyRB.AddForce(transform.right * knockbackForce, ForceMode2D.Impulse);
+                    elapsedTime = 0f;
+                }
             }
-            //deal damage to the enemy
-            GetComponent<SpriteRenderer>().enabled = false;
-        }
-        else if(collision.gameObject.tag != "Player")
             //do particle effect, then destroy it
             GetComponent<SpriteRenderer>().enabled = false;
-
-        //spawn at where the bullet hits
-        Instantiate(onHitEffect, transform.position, onHitEffect.transform.rotation);
+            //spawn at where the bullet hits
+            Instantiate(onHitEffect, transform.position, onHitEffect.transform.rotation);
+        }
     }
 }

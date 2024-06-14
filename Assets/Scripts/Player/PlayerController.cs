@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float rotationSpeed = 5.0f;
     private PlayerMovement playerMovement;
+
+    [Header("Movement Settings")]
     public Gun gun;
+
+    [Header("Movement Settings")]
+    public float minimumSize = 0.25f;
 
     // Start is called before the first frame update
     void Start()
@@ -49,15 +55,16 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        playerMovement.dashTrail.widthMultiplier = transform.localScale.x * 0.5f;
         playerMovement.Move();
     }
 
     public void ScaleDown(float offset)
     {
         Vector3 newScale = new Vector3(transform.localScale.x - offset, transform.localScale.y - offset, transform.localScale.z);
-        if (transform.localScale.x < 0.0f || transform.localScale.y < 0.0f)
+        if (transform.localScale.x <= minimumSize || transform.localScale.y <= minimumSize)
             //game over, but for now stick to setting it to 0
-            newScale.x = newScale.y = 0.0f;
+            newScale.x = newScale.y = minimumSize;
 
         transform.localScale = newScale;
     }
